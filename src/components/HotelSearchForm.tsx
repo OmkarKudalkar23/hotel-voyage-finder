@@ -1,10 +1,13 @@
 
 import { useState } from 'react';
+import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from "./ui/select";
 
 interface HotelSearchFormProps {
   onSearch: (fromCity: string, toCity: string) => void;
   isLoading: boolean;
 }
+
+const CITIES = ["Mumbai", "Delhi", "Bangalore", "Chennai"];
 
 const HotelSearchForm = ({ onSearch, isLoading }: HotelSearchFormProps) => {
   const [fromCity, setFromCity] = useState("");
@@ -18,40 +21,47 @@ const HotelSearchForm = ({ onSearch, isLoading }: HotelSearchFormProps) => {
   return (
     <div className="glass-card p-8 md:p-10 max-w-3xl mx-auto">
       <h1 className="text-3xl md:text-4xl font-bold text-center mb-8 bg-clip-text text-transparent bg-gradient-to-r from-white to-purple-200">
-        Hotel Voyage Finder
+        Travel Voyage Finder
       </h1>
       
       <form onSubmit={handleSubmit} className="space-y-6">
         <div>
           <label htmlFor="fromCity" className="hotel-label">From City:</label>
-          <input
-            id="fromCity"
-            type="text"
-            value={fromCity}
-            onChange={(e) => setFromCity(e.target.value)}
-            placeholder="Enter your departure city"
-            className="hotel-input"
-            required
-          />
+          <Select value={fromCity} onValueChange={setFromCity}>
+            <SelectTrigger className="hotel-input">
+              <SelectValue placeholder="Select departure city" />
+            </SelectTrigger>
+            <SelectContent className="bg-dark-purple border border-purple-700">
+              {CITIES.map((city) => (
+                <SelectItem key={city} value={city} className="text-white hover:bg-purple-800">
+                  {city}
+                </SelectItem>
+              ))}
+            </SelectContent>
+          </Select>
         </div>
         
         <div>
           <label htmlFor="toCity" className="hotel-label">Destination City:</label>
-          <input
-            id="toCity"
-            value={toCity}
-            onChange={(e) => setToCity(e.target.value)}
-            placeholder="Enter your destination (try 'Mumbai' or 'Delhi')"
-            className="hotel-input"
-            required
-          />
+          <Select value={toCity} onValueChange={setToCity}>
+            <SelectTrigger className="hotel-input">
+              <SelectValue placeholder="Select destination city" />
+            </SelectTrigger>
+            <SelectContent className="bg-dark-purple border border-purple-700">
+              {CITIES.map((city) => (
+                <SelectItem key={city} value={city} className="text-white hover:bg-purple-800">
+                  {city}
+                </SelectItem>
+              ))}
+            </SelectContent>
+          </Select>
         </div>
         
         <div className="pt-4">
           <button 
             type="submit" 
             className="hotel-button w-full flex items-center justify-center"
-            disabled={isLoading}
+            disabled={isLoading || !fromCity || !toCity || fromCity === toCity}
           >
             {isLoading ? (
               <>
@@ -62,9 +72,14 @@ const HotelSearchForm = ({ onSearch, isLoading }: HotelSearchFormProps) => {
                 Searching...
               </>
             ) : (
-              <>Search Hotels</>
+              <>Search Hotels & Flights</>
             )}
           </button>
+          {fromCity === toCity && fromCity !== "" && (
+            <p className="text-red-400 text-sm mt-2 text-center">
+              Source and destination cannot be the same
+            </p>
+          )}
         </div>
       </form>
     </div>
