@@ -100,7 +100,7 @@ const Index = () => {
               <div className="animate-spin rounded-full h-16 w-16 border-t-2 border-b-2 border-light-purple"></div>
             </div>
           ) : hasSearched && (
-            <div className="container mx-auto">
+            <div className="container mx-auto pb-20">
               <Tabs 
                 defaultValue={activeTab} 
                 onValueChange={setActiveTab}
@@ -152,7 +152,7 @@ const Index = () => {
                       : "No Flights Found"}
                   </h2>
                   
-                  <div className="grid grid-cols-1 lg:grid-cols-2 gap-6">
+                  <div className="grid grid-cols-1 lg:grid-cols-2 gap-8">
                     {flights.map((flight, index) => (
                       <FlightCard
                         key={`${flight.airline}-${flight.flightNumber}-${index}`}
